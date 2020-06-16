@@ -10,8 +10,8 @@ import express from "express";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import path from "path";
-import pg from "pg";
 import dotenv from "dotenv";
+import Sequelize from "sequelize";
 
 // Load .env file into environment variables
 dotenv.config();
@@ -27,14 +27,15 @@ const dir = path.resolve();
 const reactAppFile = path.join(dir, "frontend/build/index.html");
 app.use(express.static(path.join(dir, "frontend/build")));
 
-// Create PostgreSQL connection
-const client = new pg.Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgresql",
+  dialectOptions: {
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
 });
-client.connect();
+sequelize.authenticate();
 
 /*
  * REQUEST RESPONSES SECTION

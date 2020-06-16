@@ -11,10 +11,11 @@ import helmet from "helmet";
 import bodyParser from "body-parser";
 import path from "path";
 import dotenv from "dotenv";
-import Sequelize from "sequelize";
+import { User } from "./database.js";
 
 // Load .env file into environment variables
 dotenv.config();
+const dev = process.env.DEVELOPMENT === "True" ? true : false;
 
 // Set up express app, add helmet and bodyParser middleware
 const app = express();
@@ -27,15 +28,7 @@ const dir = path.resolve();
 const reactAppFile = path.join(dir, "frontend/build/index.html");
 app.use(express.static(path.join(dir, "frontend/build")));
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgresql",
-  dialectOptions: {
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  },
-});
-sequelize.authenticate();
+// Check for users in the database
 
 /*
  * REQUEST RESPONSES SECTION
@@ -46,10 +39,26 @@ app.get("/api/get", (req, res) => {
   res.json({ "backend is up": true });
 });
 
+app.get("/api/get/users", (req, res) => {
+  User.findAll().then((users) => res.json(users));
+});
+
 app.post("/api/post", (req, res) => {
   console.log(req.body);
   console.log(JSON.stringify(req.body));
   res.json({ "got it": true, "you sent": req.body.message });
+});
+
+app.post("/api/add/user", (req, res) => {
+  console.log(req.body);
+  if (req.body.name) {
+    console.log(`Adding user with name ${req.body.name}`);
+    User.create({ name: req.body.name }).then((u) => {
+      res.json({ result: "Success" });
+    });
+  } else {
+    res.json({ result: "Failure" });
+  }
 });
 
 app.get("*", (req, res) => {

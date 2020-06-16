@@ -31,6 +31,12 @@ class App extends React.Component {
       console.log("POSTing data...");
       this.setState({ post: true, postData: res.data });
     });
+
+    /* Attempt another GET */
+    axios.get("/api/get/users").then((res) => {
+      console.log("GETting data...");
+      this.setState({ users: true, userData: res.data });
+    });
   }
 
   render() {
@@ -38,18 +44,25 @@ class App extends React.Component {
       <div id="app-wrap">
         <h1>Test</h1>
         <p>
-          Get data from a <b>GET</b> request:{" "}
+          <b>1.</b> Get data from a <b>GET</b> request:{" "}
           {this.state.get ? "yep, got it" : "nope"}.
         </p>
         {this.state.get ? (
           <pre>{JSON.stringify(this.state.getData, null, 2)}</pre>
         ) : null}
         <p>
-          Get data from a <b>POST</b> request:{" "}
+          <b>2.</b> Get data from a <b>POST</b> request:{" "}
           {this.state.post ? "yep, success" : "nope"}.
         </p>
         {this.state.post ? (
           <pre>{JSON.stringify(this.state.postData, null, 2)}</pre>
+        ) : null}
+        <p>
+          <b>3.</b> Get data from another <b>GET</b> request:{" "}
+          {this.state.users ? "yep, success" : "nope"}.
+        </p>
+        {this.state.users ? (
+          <pre>{JSON.stringify(this.state.userData, null, 2)}</pre>
         ) : null}
       </div>
     );

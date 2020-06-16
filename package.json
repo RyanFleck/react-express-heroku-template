@@ -1,0 +1,15 @@
+{
+  "name": "react-express-heroku-template",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:RyanFleck/react-express-heroku-template.git",
+  "author": "Ryan Fleck <ryan.fleck@protonmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

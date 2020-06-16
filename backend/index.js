@@ -3,7 +3,7 @@ import path from "path";
 
 const app = express();
 const dir = path.resolve();
-const reactAppFile = path.join(dir + "/client/build/index.html");
+const reactAppFile = path.join(dir, "frontend/build/index.html");
 app.use(express.static(path.join(dir, "frontend/build")));
 
 app.get("/api/test", (req, res) => {

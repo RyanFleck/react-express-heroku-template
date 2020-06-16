@@ -3,16 +3,54 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
-class App extends React.Component {
+import axios from "axios";
+import axiosRetry from "axios-retry";
 
-  
+axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      get: false,
+      getData: {},
+      post: false,
+      postData: {},
+    };
+  }
+
+  componentDidMount() {
+    /* Attempt GET */
+    axios.get("/api/get").then((res) => {
+      console.log("GETting data...");
+      this.setState({ get: true, getData: res.data });
+    });
+
+    /* Attempt POST */
+    axios.post("/api/post", { message: "Hello POST" }).then((res) => {
+      console.log("POSTing data...");
+      this.setState({ post: true, postData: res.data });
+    });
+  }
 
   render() {
     return (
       <div id="app-wrap">
         <h1>Test</h1>
-        <p>Get data from a GET request:</p>
-        <p>Get data from a POST request:</p>
+        <p>
+          Get data from a <b>GET</b> request:{" "}
+          {this.state.get ? "yep, got it" : "nope"}.
+        </p>
+        {this.state.get ? (
+          <pre>{JSON.stringify(this.state.getData, null, 2)}</pre>
+        ) : null}
+        <p>
+          Get data from a <b>POST</b> request:{" "}
+          {this.state.post ? "yep, success" : "nope"}.
+        </p>
+        {this.state.post ? (
+          <pre>{JSON.stringify(this.state.postData, null, 2)}</pre>
+        ) : null}
       </div>
     );
   }

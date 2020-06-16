@@ -8,9 +8,12 @@
   "license": "MIT",
   "scripts": {
     "start": "node backend/index.js",
+    "develop": "nodemon backend/index.js",
     "heroku-postbuild": "cd frontend && yarn && yarn run build"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "pg": "^8.2.1"
   }
 }
